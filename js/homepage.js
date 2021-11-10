@@ -7,10 +7,16 @@ var getUserRepos = function(user) {
   
     // make a get request to url
     fetch(apiUrl).then(function(response) {
-      console.log(response);
-      response.json().then(function(data) {
-        displayRepos(data, user);
-      });
+        if (response.ok) {
+            response.json().then(function(data) {
+                displayRepos(data, user);
+            });
+        } else {
+            alert("Error: Github User Not Found");
+        }
+    })
+    .catch(function(error) {
+        alert("unable to connect to Guthub");
     });
   };
 
@@ -35,6 +41,11 @@ var getUserRepos = function(user) {
   //getUserRepos("andy-waine");
 
   var displayRepos = function(repos, searchTerm) {
+      //check if api returned any repos
+      if (repos.length === 0) {
+          repoContainerE1.textContent = "No Repositories Found.";
+          return;
+      }
       console.log(repos);
       console.log(searchTerm);
 
